@@ -44,6 +44,7 @@ $MainCode = {
     $DaysDigit = $days.ToString().ToCharArray()
 
     $syncHash.Window.FindName("FormUI").Add_ContentRendered({
+        $syncHash.Window.FindName("LBL_ComputerName").Content = $env:COMPUTERNAME
         Switch($true){
              ($DaysDigit.length -eq 1){
                  $syncHash.Window.FindName("LBL_DayDigit1").Content = $DaysDigit[0]
