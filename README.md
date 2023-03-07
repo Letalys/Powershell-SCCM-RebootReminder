@@ -100,6 +100,7 @@ Add Configuration data and select your Configuration Item
 You can right click on your baseline and select **Deploy**
 
 Check **Remediate noncompliant rules when supported**
+
 Select the collection you want to deploy your baseline.
 
 Schedule your evaluation.
