@@ -53,6 +53,7 @@ For Error log, user need to have write access, so i use ``$env:USERPROFILE`` but
 In the SCCM console : "Assets and Compliance/Overview/Compliance Settings/Configuration Items", create new configuration item.
 
 Set the item configuration name.
+
 ![image info](./Screenshots/1.png)
 
 Select the supported platform of your script. In this case, we select Windows 7 x64 and Windows 10 x64.
