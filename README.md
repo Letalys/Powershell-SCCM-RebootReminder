@@ -9,6 +9,15 @@ These scripts allow through SCCM compliance rules to display an interface (Notif
 
 ### Configure the compliance detection script
 
+First, you have to set the max days before showing UI (l16), i setup by default 7 days.
+
+```
+$MaxDays = 7
+```
+
+If the compliance detection return ``$true``, the remediation script will be executed. (Result not compliant)
+
+
 ### Configure the compliance remediation script
 
 ### Configure the XAML UI Logo
