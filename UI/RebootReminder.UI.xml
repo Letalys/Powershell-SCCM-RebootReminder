@@ -1,8 +1,10 @@
-<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<Window 
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        Title="MainWindow" Height="150" Width="400" WindowStyle="None" WindowStartupLocation="Manual" WindowState="Normal" ResizeMode="NoResize" Name="FormUI" ShowInTaskbar="False">
+        xmlns:local="clr-namespace:Reboot_Reminder"
+        Title="MainWindow" Height="150" Width="450" WindowStyle="None" WindowStartupLocation="Manual" WindowState="Normal" ResizeMode="NoResize" ShowInTaskbar="False">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Foreground" Value="#FFF" />
@@ -38,42 +40,45 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    <Window.Background>
-        <ImageBrush ImageSource="----------"/> <!--400*150-->
-    </Window.Background>
-    <Grid>
+
+    <Grid Background="#FF007FFF">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="45"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Border BorderBrush="#FFFD0101" BorderThickness="0,0,0,2">
-            <Label Content="Computer reboot reminder" Foreground="White" FontWeight="Bold" FontSize="14" />
+        <Border BorderBrush="#FFFD0101" BorderThickness="0,1,0,2" Grid.ColumnSpan="2">
+            <Label Content="Reboot Reminder" Foreground="White" FontWeight="Bold" FontSize="14" />
         </Border>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Stretch">
-            <Label Content="Your computer " Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Name="LBL_ComputerName" Content="------" Foreground="#FFF77405" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" />
-            <Label Content="not been restarted since :" VerticalAlignment="Center" Foreground="#FFFBFBFB"/>
+        <StackPanel Orientation="Vertical" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.RowSpan="3">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Your computer " Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Label Name="LBL_ComputerName" Content="--------" Foreground="#FFF77405" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" />
+                <Label Content="has not been restarted since :" VerticalAlignment="Center" Foreground="#FFFBFBFB"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border Background="#FFFB9602" CornerRadius="5" Margin="3,0,3,0">
+                    <Label Name="LBL_DayDigit3" Content="0" FontSize="24" FontWeight="Bold" Foreground="#FFF90D0D"/>
+                </Border>
+                <Border Background="#FFFB9602" CornerRadius="5" Margin="3,0,3,0">
+                    <Label Name="LBL_DayDigit2" Content="0" FontSize="24" FontWeight="Bold" Foreground="#FFF90D0D"/>
+                </Border>
+                <Border Background="#FFFB9602" CornerRadius="5" Margin="3,0,3,0">
+                    <Label Name="LBL_DayDigit1" Content="0" FontSize="24" FontWeight="Bold" Foreground="#FFF90D0D"/>
+                </Border>
+                <Label Content="DAY(s)" FontSize="24" Foreground="#FFFBFBFB"/>
+            </StackPanel>
+            <StackPanel  Orientation="Horizontal"  Margin="0,10,0,0" HorizontalAlignment="Center">
+                <Button Name="B_RebootNow" FontSize="15"  Height="30" MinWidth="160" Margin="0,0,5,0">Restart now</Button>
+                <Button Name="B_RebootLater" FontSize="15"  Height="30" MinWidth="160" Margin="5,0,0,0">Restart Later</Button>
+            </StackPanel>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Border Background="#FFFB9602" CornerRadius="5" Margin="3,0,3,0">
-                <Label Name="LBL_DayDigit3" Content="0" FontSize="24" FontWeight="Bold" Foreground="#FFF90D0D"/>
-            </Border>
-            <Border Background="#FFFB9602" CornerRadius="5" Margin="3,0,3,0">
-                <Label Name="LBL_DayDigit2" Content="0" FontSize="24" FontWeight="Bold" Foreground="#FFF90D0D"/>
-            </Border>
-            <Border Background="#FFFB9602" CornerRadius="5" Margin="3,0,3,0">
-                <Label Name="LBL_DayDigit1" Content="0" FontSize="24" FontWeight="Bold" Foreground="#FFF90D0D"/>
-            </Border>
-            <Label Content="Day(s)" FontSize="24" Foreground="#FFFBFBFB"/>
-        </StackPanel>
-        <StackPanel Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="15,0,0,0">
-            <Button Name="B_RebootNow" FontSize="15" Margin="5,0,5,0" Height="30">Restart Now</Button>
-            <Button Name="B_RebootLater" FontSize="15" Margin="5,0,5,0">Restart Later</Button>
-        </StackPanel>
+        <Image Source="/LogoSample150x150.png" Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Stretch" Margin="0,0,3,0"/>
+        <Border Grid.Row="3" BorderBrush="Red" BorderThickness="0,0,0,2" Grid.ColumnSpan="2" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>
