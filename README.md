@@ -50,6 +50,42 @@ For Error log, user need to have write access, so i use ``$env:USERPROFILE`` but
 
 ### Creating new configuration item
 
+In the SCCM console : "Assets and Compliance/Overview/Compliance Settings/Configuration Items", create new configuration item.
+
+Set the item configuration name.
+![image info](./Screenshots/1.png)
+
+Select the supported platform of your script. In this case, we select Windows 7 x64 and Windows 10 x64.
+
+![image info](./Screenshots/2.png)
+
+In Settings Tabs, add New setting. 
+
+#### General Tabs
+
+Select **script** for setting type and **boolean** for datatype. (It's the return value type for the detection script).
+
+In **Discovery script**, copy/paste the detection script.
+In **Remediation script**, copy/paste the remediation script.
+
+Check **Run scripts by using the logged on user credentials**
+
+![image info](./Screenshots/4.png)
+
+#### Compliance rules Tabs
+
+Add new rule.
+Set the name of your rule and set **the value returned by the specific script Equals True**
+
+Check **Run the specified remediation script when this setting is noncompliant**
+
+![image info](./Screenshots/6.png)
+
+You can go to finalize the Create configuration Wizard.
+
+![image info](./Screenshots/7.png) ![image info](./Screenshots/9.png)
+![image info](./Screenshots/10.png)
+
 ### Creating new baseline configuration
 
 ### Deploying
