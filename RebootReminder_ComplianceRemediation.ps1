@@ -25,7 +25,7 @@ $RunspaceCode = {
 
     try{
         [xml]$XAML = [IO.File]::ReadAllText($XAMLDoc,[Text.Encoding]::GetEncoding(65001))
-        
+
         #Creation of a Thread-Safe synchronization HashTable, allows to retrieve objects and properties by any RunSpace (Execution space)
         $syncHash = [hashtable]::Synchronized(@{})
 
@@ -78,14 +78,14 @@ $RunspaceCode = {
         $syncHash.Window.ShowDialog() | Out-Null
         Write-Output "$($Global:Selection)"
     }catch{
-        Write-Output "$_" | Out-File $ErrorLog
+        Write-Output "Error in line $($_.InvocationInfo.ScriptLineNumber) : $($_)" | Out-File $ErrorLog
     }
 }
 
 #Creating runspace
-$XAMLUrl = "<Path to XAML UI>\RebootReminder.UI.xml"
-$ErrLogUI = "<Path to Runspace Error Log>\CCM-RebootReminder-Runspace.log"
-$ErrLogExec = "<Path to Main Execution Error Log>\CCM-RebootReminder-MainExec.log"
+$XAMLUrl = "$PSScriptRoot\UI\RebootReminder.UI.xml"
+$ErrLogUI = "$PSScriptRoot\CCM-RebootReminder-Runspace.log"
+$ErrLogExec = "$PSScriptRoot\CCM-RebootReminder-MainExec.log"
 
 Try{
     #Get the last time reboot (Using this method to be compatible with Powershell 2.0 on Windows 7)
@@ -102,6 +102,7 @@ Try{
     $Runspace.ApartmentState = "STA"
     $Runspace.ThreadOptions = "ReuseThread"
     $Runspace.Open()
+
     $Powershell = [powershell]::Create()
     $Powershell.AddScript($RunspaceCode)
     $Powershell.AddArgument($XAMLUrl)
@@ -127,5 +128,5 @@ Try{
         Restart-Computer -Force
     }
 }Catch{
-	Write-Output "$_" | Out-File $ErrLogExec
+	Write-Output "Error in line $($_.InvocationInfo.ScriptLineNumber) : $($_)" | Out-File $ErrLogExec
 }
