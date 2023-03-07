@@ -21,6 +21,9 @@ I setup 7 days by default
 
 Compliance rules will be executed with the credentials of the logged in user. Therefore, you must place the XML and Logo files in a share that is readable by all your users. For example, you can use the **SYSVOL** share of your domain controller. For me, that's how I use it.
 
+
+>***You can also decide to integrate the XAML code directly into the remediation script, but I prefer to split the two to facilitate maintenance. However you will still need to put your logo in a shared space accessible to all in reading (unless you remove the image tag to put nothing)***
+
 ### Configure the XAML UI for your Logo
 
 Now you can add the path to your logo via an absolute path (Which then points to your shared read space).
