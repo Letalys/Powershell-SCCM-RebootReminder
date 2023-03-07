@@ -82,10 +82,10 @@ $RunspaceCode = {
     }
 }
 
-#Creating runspace
+#Configuration
 $XAMLUrl = "$PSScriptRoot\UI\RebootReminder.UI.xml"
-$ErrLogUI = "$PSScriptRoot\CCM-RebootReminder-Runspace.log"
-$ErrLogExec = "$PSScriptRoot\CCM-RebootReminder-MainExec.log"
+$ErrLogUI = "$env:USERPROFILE\CCM-RebootReminder-Runspace.log"
+$ErrLogExec = "$env:USERPROFILE\CCM-RebootReminder-MainExec.log"
 
 Try{
     #Get the last time reboot (Using this method to be compatible with Powershell 2.0 on Windows 7)

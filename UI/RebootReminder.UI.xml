@@ -77,7 +77,7 @@
                 <Button Name="B_RebootLater" FontSize="15"  Height="30" MinWidth="160" Margin="5,0,0,0">Restart Later</Button>
             </StackPanel>
         </StackPanel>
-        <Image Source="/LogoSample150x150.png" Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Stretch" Margin="0,0,3,0"/>
+        <Image Source="<YourSharedPath>" Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Stretch" Margin="0,0,3,0"/>
         <Border Grid.Row="3" BorderBrush="Red" BorderThickness="0,0,0,2" Grid.ColumnSpan="2" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>
