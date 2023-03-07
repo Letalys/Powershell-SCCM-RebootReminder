@@ -1,13 +1,13 @@
 <#
 .SYNOPSIS
-  Create WPF Notification style for remind reboot
+    Create WPF Notification style for remind reboot
 .DESCRIPTION
-  
+    This part need to be used into SCCM compliance remediation.
 .NOTES
-  Version:        1.0
-  Author:         Letalys
-  Creation Date:  06/03/2023
-  Purpose/Change: Initial script development
+    Version:        1.0
+    Author:         Letalys
+    Creation Date:  07/03/2023
+    Purpose/Change: Initial script development
 #>
 
 #region Add-Type
@@ -16,8 +16,12 @@
 [System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms')
 #endregion Add-Type
 
-$MainCode = {
-    Param([Parameter(Mandatory=$true)]$XAMLDoc)
+$RunspaceCode = {
+    Param(
+        [Parameter(Mandatory=$true)]$XAMLDoc,
+        [Parameter(Mandatory=$true)]$LastRebootDays,
+        [Parameter(Mandatory=$true)]$ErrorLog
+    )
 
     try{
         [xml]$XAML = [IO.File]::ReadAllText($XAMLDoc,[Text.Encoding]::GetEncoding(65001))
@@ -36,13 +40,7 @@ $MainCode = {
 
         #Set topmost
         $syncHash.Window.TopMost = $true
-
-        #Get the last time reboot
-        $DiffTimeSpan = New-TimeSpan $(Get-Date ((Get-CimInstance -Class Win32_OperatingSystem).LastBootUpTime)) $(Get-Date)
-
-        #Get Rounded up day
-        $days = [math]::Round($DiffTimeSpan.TotalDays)
-        $DaysDigit = $days.ToString().ToCharArray()
+        $DaysDigit = $LastRebootDays.ToString().ToCharArray()
 
         $syncHash.Window.FindName("FormUI").Add_ContentRendered({
             $syncHash.Window.FindName("LBL_ComputerName").Content = $env:COMPUTERNAME
@@ -78,38 +76,56 @@ $MainCode = {
 
         #Show Window
         $syncHash.Window.ShowDialog() | Out-Null
-        Write-Output $Days
-        Write-Output $Global:Selection
-
+        Write-Output "$($Global:Selection)"
     }catch{
-        Write-Output $_
-        Write-Output -1
+        Write-Output "$_" | Out-File $ErrorLog
     }
 }
 
 #Creating runspace
-$XAMLUrl = "<Path to your XML Template>"
+$XAMLUrl = "<Path to XAML UI>\RebootReminder.UI.xml"
+$ErrLogUI = "<Path to Runspace Error Log>\CCM-RebootReminder-Runspace.log"
+$ErrLogExec = "<Path to Main Execution Error Log>\CCM-RebootReminder-MainExec.log"
 
-$Runspace = [runspacefactory]::CreateRunspace()
-$Runspace.ApartmentState = "STA"
-$Runspace.ThreadOptions = "ReuseThread"
-$Runspace.Open()
-$Powershell = [powershell]::Create()
-$Powershell.AddScript($MainCode)
-$Powershell.AddArgument($XAMLUrl)
+Try{
+    #Get the last time reboot (Using this method to be compatible with Powershell 2.0 on Windows 7)
+    if($PSVersionTable.PSVersion -lt [Version]"4.0"){
+        $LastBootUpTime = [Management.ManagementDateTimeConverter]::ToDateTime((Get-WmiObject -Class Win32_OperatingSystem).LastBootUpTime)
+    }else{
+        $LastBootUpTime = $(Get-Date ((Get-CimInstance -Class Win32_OperatingSystem).LastBootUpTime))
+    }
 
-$Powershell.Runspace = $Runspace
-$Results = $Powershell.BeginInvoke()
+    $DiffTimeSpan = New-TimeSpan -Start (Get-Date($LastBootUpTime)) -End (Get-Date)
+    $Days = [math]::Round($DiffTimeSpan.TotalDays)
+    
+    $Runspace = [runspacefactory]::CreateRunspace()
+    $Runspace.ApartmentState = "STA"
+    $Runspace.ThreadOptions = "ReuseThread"
+    $Runspace.Open()
+    $Powershell = [powershell]::Create()
+    $Powershell.AddScript($RunspaceCode)
+    $Powershell.AddArgument($XAMLUrl)
+    $Powershell.AddArgument($Days)
+    $Powershell.AddArgument($ErrLogUI)
 
-#Wait Results Completed
-while (-not $Results.IsCompleted) {
-    Start-Sleep -Milliseconds 100
+    $Powershell.Runspace = $Runspace
+    $Results = $Powershell.BeginInvoke()
+
+    #Wait Results Completed
+    while (-not $Results.IsCompleted) {
+        Start-Sleep -Seconds 1
+    }
+
+    $Results = $Powershell.EndInvoke($Results)
+
+    #Close the runspace
+    $Runspace.Close()
+    $Runspace.Dispose()
+
+    #Restart Computer
+    if ([int]$Results[0] -eq 1){
+        Restart-Computer -Force
+    }
+}Catch{
+	Write-Output "$_" | Out-File $ErrLogExec
 }
-
-$Results = $Powershell.EndInvoke($Results)
-
-#Close the runspace
-$Runspace.Close()
-$Runspace.Dispose()
-
-Return $Results
