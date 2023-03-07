@@ -50,7 +50,7 @@ For Error log, user need to have write access, so i use ``$env:USERPROFILE`` but
 
 ### Creating new configuration item
 
-In the SCCM console : "Assets and Compliance/Overview/Compliance Settings/Configuration Items", create new configuration item.
+In the SCCM console : **Assets and Compliance/Overview/Compliance Settings/Configuration Items** , create new configuration item.
 
 Set the item configuration name.
 
@@ -89,12 +89,28 @@ You can go to finalize the Create configuration Wizard.
 
 ### Creating new baseline configuration
 
-### Deploying
+In the SCCM console : **Assets and Compliance/Overview/Compliance Settings/Configuration Baselines**, create new configuration baseline.
 
+Add Configuration data and select your Configuration Item
 
+![image info](./Screenshots/11.png)
+
+### Deploying your configuration baseline
+
+You can right click on your baseline and select **Deploy**
+
+Check **Remediate noncompliant rules when supported**
+Select the collection you want to deploy your baseline.
+
+Schedule your evaluation.
+
+> I set every 4 hours because if a user click on restart later, it will be prompt again 4H later.
+> But you can schedule your compliance evaluation as you wish
+
+![image info](./Screenshots/12.png)
 
 ## 🔗 Links
-https://github.com/Letalys/Powershell-SCCM-CustomInventory
+https://github.com/Letalys/Powershell-SCCM-RebootReminder
 
 
 ## Autor
