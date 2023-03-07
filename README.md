@@ -9,14 +9,13 @@ These scripts allow through SCCM compliance rules to display an interface (Notif
 
 ### Configure the compliance detection script
 
-First, you have to set the max days before showing UI (l16), i setup by default 7 days.
+You can modify the maximum threshold for the number of days between two restarts (Line 16). Beyond this value ,if the number of days since last restart reaches or exceeds this value, then the remediation script will be executed. The value returned by the script will be ``$true`` (considered non-compliant)
 
 ```
 $MaxDays = 7
 ```
 
-If the compliance detection return ``$true``, the remediation script will be executed. (Result not compliant)
-
+I setup 7 days by default
 
 ### Configure the compliance remediation script
 
